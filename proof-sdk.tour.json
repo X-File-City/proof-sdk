@@ -1,0 +1,464 @@
+{
+  "id": "proof-sdk-onboarding",
+  "title": "Proof SDK: Collaborative Editor with AI Agent Bridge",
+  "description": "A guided tour of the Proof SDK — an open-source collaborative markdown editor with provenance tracking, real-time collaboration, and an HTTP bridge for AI agents.",
+  "version": "1.0.0",
+  "audience": "New Contributors & Integrators",
+  "prerequisites": [
+    "Familiarity with TypeScript and Node.js",
+    "Basic understanding of collaborative editing concepts (CRDTs, Yjs)"
+  ],
+  "steps": [
+    {
+      "id": "step-1-overview",
+      "title": "Welcome to Proof SDK",
+      "description": "Proof SDK is an open-source collaborative markdown editor with provenance tracking and an AI agent bridge. The project is organized as a monorepo with npm workspaces: reusable SDK packages live in `packages/`, the editor and agent runtime in `src/`, the Express server in `server/`, and documentation in `docs/`. Let's explore each layer.",
+      "estimatedTime": 60,
+      "colorMode": "fileTypes",
+      "focusDirectory": "",
+      "highlightLayers": [
+        {
+          "id": "top-level-config",
+          "name": "Root Configuration",
+          "color": "#94a3b8",
+          "items": [
+            { "path": "package.json", "type": "file" },
+            { "path": "tsconfig.json", "type": "file" },
+            { "path": "vite.config.ts", "type": "file" }
+          ],
+          "opacity": 0.6,
+          "renderStrategy": "border"
+        }
+      ]
+    },
+    {
+      "id": "step-2-packages",
+      "title": "SDK Packages (packages/)",
+      "description": "The `packages/` directory contains five private npm workspace packages that form the reusable SDK core:\n\n• **@proof/core** (doc-core) — Core document types, marks system, and provenance sidecar format\n• **@proof/editor** (doc-editor) — Editor runtime with Milkdown plugins for suggestions, comments, and agent cursors\n• **@proof/server** (doc-server) — Express routers for documents, shares, agents, and the collaboration bridge\n• **@proof/sqlite** (doc-store-sqlite) — SQLite-backed document storage adapters\n• **@proof/agent-bridge** (agent-bridge) — Typed HTTP client and route schemas for AI agent integration\n\nEach package has a clean `src/index.ts` barrel export and can be independently consumed.",
+      "estimatedTime": 90,
+      "focusDirectory": "packages",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "core-pkg",
+          "name": "@proof/core",
+          "color": "#3b82f6",
+          "items": [
+            { "path": "packages/doc-core", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "editor-pkg",
+          "name": "@proof/editor",
+          "color": "#10b981",
+          "items": [
+            { "path": "packages/doc-editor", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "server-pkg",
+          "name": "@proof/server",
+          "color": "#f59e0b",
+          "items": [
+            { "path": "packages/doc-server", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "sqlite-pkg",
+          "name": "@proof/sqlite",
+          "color": "#ef4444",
+          "items": [
+            { "path": "packages/doc-store-sqlite", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "bridge-pkg",
+          "name": "@proof/agent-bridge",
+          "color": "#8b5cf6",
+          "items": [
+            { "path": "packages/agent-bridge", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        }
+      ],
+      "interactiveActions": [
+        {
+          "type": "hover-directory",
+          "description": "Hover over each package directory to see its contents",
+          "target": "packages/doc-core"
+        }
+      ]
+    },
+    {
+      "id": "step-3-editor",
+      "title": "Editor Runtime (src/editor/)",
+      "description": "The editor is built on Milkdown (a ProseMirror-based markdown editor) with 15+ custom plugins. Key areas:\n\n• **plugins/** — Comments, suggestions, marks sync, agent cursors, heatmap decorations, mermaid diagrams, and more\n• **schema/** — ProseMirror schema extensions for proof marks, code blocks, and frontmatter\n• **index.ts** — Main editor initialization and configuration\n• **actor.ts** — Actor pattern for document mutations\n• **batch-executor.ts** — Batch operation execution\n\nThe plugin system is the heart of the collaborative editing experience.",
+      "estimatedTime": 120,
+      "focusDirectory": "src/editor",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "editor-plugins",
+          "name": "Editor Plugins",
+          "color": "#10b981",
+          "items": [
+            { "path": "src/editor/plugins", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "editor-schema",
+          "name": "Schema Extensions",
+          "color": "#f59e0b",
+          "items": [
+            { "path": "src/editor/schema", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "editor-entry",
+          "name": "Entry & Actors",
+          "color": "#3b82f6",
+          "items": [
+            { "path": "src/editor/index.ts", "type": "file" },
+            { "path": "src/editor/actor.ts", "type": "file" },
+            { "path": "src/editor/batch-executor.ts", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "fill"
+        }
+      ],
+      "interactiveActions": [
+        {
+          "type": "click-file",
+          "description": "Click plugins/marks.ts to see the core marks plugin",
+          "target": "src/editor/plugins/marks.ts"
+        }
+      ]
+    },
+    {
+      "id": "step-4-agent",
+      "title": "Agent System (src/agent/)",
+      "description": "The agent system lets AI assistants collaborate on documents through an HTTP bridge. Key components:\n\n• **orchestrator.ts** — Agent orchestration and task coordination\n• **http-bridge-client.ts** — HTTP client for agent-to-server communication\n• **proposals.ts** — Proposal generation for agent-suggested edits\n• **session-manager.ts** — Agent session lifecycle management\n• **skills/** & **tools/** — Pluggable agent capabilities\n• **prompts/** — Prompt templates for agent interactions\n\nAgents can read document state, add comments, make suggestions, and apply full rewrites — all through the bridge API.",
+      "estimatedTime": 120,
+      "focusDirectory": "src/agent",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "agent-orchestration",
+          "name": "Orchestration",
+          "color": "#8b5cf6",
+          "items": [
+            { "path": "src/agent/orchestrator.ts", "type": "file" },
+            { "path": "src/agent/orchestrator-synthesizer.ts", "type": "file" },
+            { "path": "src/agent/session-manager.ts", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "fill"
+        },
+        {
+          "id": "agent-bridge-client",
+          "name": "Bridge Client",
+          "color": "#3b82f6",
+          "items": [
+            { "path": "src/agent/http-bridge-client.ts", "type": "file" },
+            { "path": "src/agent/external-agent-bridge.ts", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "fill"
+        },
+        {
+          "id": "agent-extensibility",
+          "name": "Skills & Tools",
+          "color": "#10b981",
+          "items": [
+            { "path": "src/agent/skills", "type": "directory" },
+            { "path": "src/agent/tools", "type": "directory" },
+            { "path": "src/agent/prompts", "type": "directory" }
+          ],
+          "opacity": 0.6,
+          "renderStrategy": "border"
+        }
+      ],
+      "interactiveActions": [
+        {
+          "type": "click-file",
+          "description": "Click orchestrator.ts to see how agents coordinate edits",
+          "target": "src/agent/orchestrator.ts"
+        }
+      ]
+    },
+    {
+      "id": "step-5-bridge",
+      "title": "Bridge Protocol (src/bridge/)",
+      "description": "The bridge layer defines how agents communicate with documents. It sits between the agent system and the server:\n\n• **bridge-routes.ts** — Route definitions and execution interfaces\n• **bridge-executor.ts** — Executes bridge operations (comments, suggestions, rewrites)\n• **collab-client.ts** — WebSocket client for real-time collaboration sync\n• **marks-preservation.ts** — Ensures marks survive across bridge operations\n• **share-client.ts** — Share token and permission management\n\nThis is the contract layer documented in `AGENT_CONTRACT.md`.",
+      "estimatedTime": 90,
+      "focusDirectory": "src/bridge",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "bridge-protocol",
+          "name": "Bridge Protocol",
+          "color": "#ec4899",
+          "items": [
+            { "path": "src/bridge/bridge-routes.ts", "type": "file" },
+            { "path": "src/bridge/bridge-executor.ts", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "fill"
+        },
+        {
+          "id": "bridge-collab",
+          "name": "Collab & Marks",
+          "color": "#06b6d4",
+          "items": [
+            { "path": "src/bridge/collab-client.ts", "type": "file" },
+            { "path": "src/bridge/marks-preservation.ts", "type": "file" },
+            { "path": "src/bridge/share-client.ts", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "fill"
+        }
+      ]
+    },
+    {
+      "id": "step-6-server",
+      "title": "Express Server (server/)",
+      "description": "The server provides the HTTP API and real-time collaboration backend. Major areas:\n\n• **db.ts** — SQLite database layer (document CRUD, marks, events, idempotency)\n• **collab.ts** — Yjs collaboration runtime and WebSocket sync\n• **document-engine.ts** — Document mutation execution\n• **agent-routes.ts** & **agent-edit-v2.ts** — Agent API endpoints and edit operations\n• **bridge.ts** & **bridge-auth-policy.ts** — Bridge router and authentication\n• **discovery-routes.ts** — `.well-known/agent.json` service discovery\n\nThe server runs on Express 5 with better-sqlite3 for persistence and WebSocket rooms for real-time sync.",
+      "estimatedTime": 120,
+      "focusDirectory": "server",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "server-data",
+          "name": "Data & Storage",
+          "color": "#ef4444",
+          "items": [
+            { "path": "server/db.ts", "type": "file" },
+            { "path": "server/document-engine.ts", "type": "file" },
+            { "path": "server/canonical-document.ts", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "fill"
+        },
+        {
+          "id": "server-collab",
+          "name": "Collaboration",
+          "color": "#3b82f6",
+          "items": [
+            { "path": "server/collab.ts", "type": "file" },
+            { "path": "server/ws.ts", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "fill"
+        },
+        {
+          "id": "server-agent",
+          "name": "Agent API",
+          "color": "#8b5cf6",
+          "items": [
+            { "path": "server/agent-routes.ts", "type": "file" },
+            { "path": "server/agent-edit-v2.ts", "type": "file" },
+            { "path": "server/bridge.ts", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "fill"
+        }
+      ],
+      "interactiveActions": [
+        {
+          "type": "click-file",
+          "description": "Click db.ts to see the SQLite storage layer",
+          "target": "server/db.ts"
+        }
+      ]
+    },
+    {
+      "id": "step-7-formats-and-ui",
+      "title": "Data Formats & UI (src/formats/, src/ui/)",
+      "description": "Supporting layers round out the runtime:\n\n**src/formats/** — Core data structures:\n• **marks.ts** — Marks serialization (comments, suggestions, rewrites)\n• **provenance-sidecar.ts** — Provenance metadata tracking authorship\n• **remark-proof-marks.ts** — Remark plugin for proof marks in markdown\n\n**src/ui/** — Custom web-component UI:\n• Agent presence indicators and cursors\n• Context menus, review menus, and theme picker\n• Welcome card and name prompt dialogs",
+      "estimatedTime": 60,
+      "focusDirectory": "src",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "formats-layer",
+          "name": "Data Formats",
+          "color": "#f59e0b",
+          "items": [
+            { "path": "src/formats", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "ui-layer",
+          "name": "UI Components",
+          "color": "#10b981",
+          "items": [
+            { "path": "src/ui", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        }
+      ]
+    },
+    {
+      "id": "step-8-tests-and-docs",
+      "title": "Tests & Documentation",
+      "description": "The project has strong test coverage and documentation:\n\n**src/tests/** — 130+ integration tests covering agent edits, bridge operations, share permissions, collab race conditions, and more. Tests run via `tsx` for direct TypeScript execution.\n\n**docs/** — Architecture decision records, the provenance spec (v2), agent API docs, and the Proof editor skill definition.\n\n**AGENT_CONTRACT.md** — The public API contract for agent bridge integration.\n\n**apps/proof-example/** — Example application showing agent HTTP bridge usage.",
+      "estimatedTime": 60,
+      "focusDirectory": "",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "tests-layer",
+          "name": "Test Suite",
+          "color": "#10b981",
+          "items": [
+            { "path": "src/tests", "type": "directory" }
+          ],
+          "opacity": 0.6,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "docs-layer",
+          "name": "Documentation",
+          "color": "#3b82f6",
+          "items": [
+            { "path": "docs", "type": "directory" },
+            { "path": "AGENT_CONTRACT.md", "type": "file" }
+          ],
+          "opacity": 0.6,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "example-layer",
+          "name": "Example App",
+          "color": "#f59e0b",
+          "items": [
+            { "path": "apps/proof-example", "type": "directory" }
+          ],
+          "opacity": 0.6,
+          "renderStrategy": "border"
+        }
+      ],
+      "interactiveActions": [
+        {
+          "type": "hover-directory",
+          "description": "Hover over src/tests to see the breadth of test coverage",
+          "target": "src/tests"
+        }
+      ]
+    },
+    {
+      "id": "step-9-recap",
+      "title": "Architecture Recap",
+      "description": "Here's the full picture:\n\n🔵 **packages/** — Reusable SDK packages (@proof/core, editor, server, sqlite, agent-bridge)\n🟢 **src/editor/** — Milkdown-based editor with 15+ plugins\n🟣 **src/agent/** — AI agent orchestration and session management\n🩷 **src/bridge/** — Bridge protocol connecting agents to documents\n🔴 **server/** — Express API, SQLite storage, and Yjs collaboration runtime\n🟡 **src/formats/** — Marks and provenance data structures\n\nTo get started: run `npm run dev` for the Vite dev server and `npm run serve` for the Express backend. Check `AGENT_CONTRACT.md` for the bridge API, and `docs/agent-docs.md` for agent integration details.",
+      "estimatedTime": 60,
+      "focusDirectory": "",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "recap-packages",
+          "name": "SDK Packages",
+          "color": "#3b82f6",
+          "items": [
+            { "path": "packages", "type": "directory" }
+          ],
+          "opacity": 0.5,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "recap-editor",
+          "name": "Editor",
+          "color": "#10b981",
+          "items": [
+            { "path": "src/editor", "type": "directory" }
+          ],
+          "opacity": 0.5,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "recap-agent",
+          "name": "Agent System",
+          "color": "#8b5cf6",
+          "items": [
+            { "path": "src/agent", "type": "directory" }
+          ],
+          "opacity": 0.5,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "recap-bridge",
+          "name": "Bridge Protocol",
+          "color": "#ec4899",
+          "items": [
+            { "path": "src/bridge", "type": "directory" }
+          ],
+          "opacity": 0.5,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "recap-server",
+          "name": "Server",
+          "color": "#ef4444",
+          "items": [
+            { "path": "server", "type": "directory" }
+          ],
+          "opacity": 0.5,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "recap-formats",
+          "name": "Data Formats",
+          "color": "#f59e0b",
+          "items": [
+            { "path": "src/formats", "type": "directory" }
+          ],
+          "opacity": 0.5,
+          "renderStrategy": "border"
+        }
+      ],
+      "resources": [
+        {
+          "title": "Agent Contract (API Reference)",
+          "url": "AGENT_CONTRACT.md",
+          "type": "documentation"
+        },
+        {
+          "title": "Agent HTTP Bridge Docs",
+          "url": "docs/agent-docs.md",
+          "type": "documentation"
+        },
+        {
+          "title": "Provenance Specification v2",
+          "url": "docs/PROVENANCE-SPEC-v2.md",
+          "type": "documentation"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "author": "Claude",
+    "createdAt": "2026-03-11",
+    "tags": [
+      "onboarding",
+      "architecture",
+      "collaborative-editing",
+      "agent-bridge",
+      "proof-sdk"
+    ]
+  }
+}
