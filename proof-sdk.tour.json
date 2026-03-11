@@ -34,14 +34,14 @@
     {
       "id": "step-2-packages",
       "title": "SDK Packages (packages/)",
-      "description": "Five SDK packages form the reusable core: @proof/core (types & marks), @proof/editor (Milkdown plugins), @proof/server (Express routers), @proof/sqlite (storage), and @proof/agent-bridge (typed HTTP client). Each has a barrel export and can be independently consumed.",
+      "description": "Five SDK packages form the reusable core: proof/core (types & marks), proof/editor (Milkdown plugins), proof/server (Express routers), proof/sqlite (storage), and proof/agent-bridge (typed HTTP client). Each has a barrel export and can be independently consumed.",
       "estimatedTime": 90,
       "focusDirectory": "packages",
       "colorMode": "fileTypes",
       "highlightLayers": [
         {
           "id": "core-pkg",
-          "name": "@proof/core",
+          "name": "proof/core",
           "color": "#3b82f6",
           "items": [
             { "path": "packages/doc-core", "type": "directory" }
@@ -51,7 +51,7 @@
         },
         {
           "id": "editor-pkg",
-          "name": "@proof/editor",
+          "name": "proof/editor",
           "color": "#10b981",
           "items": [
             { "path": "packages/doc-editor", "type": "directory" }
@@ -61,7 +61,7 @@
         },
         {
           "id": "server-pkg",
-          "name": "@proof/server",
+          "name": "proof/server",
           "color": "#f59e0b",
           "items": [
             { "path": "packages/doc-server", "type": "directory" }
@@ -71,7 +71,7 @@
         },
         {
           "id": "sqlite-pkg",
-          "name": "@proof/sqlite",
+          "name": "proof/sqlite",
           "color": "#ef4444",
           "items": [
             { "path": "packages/doc-store-sqlite", "type": "directory" }
@@ -81,7 +81,7 @@
         },
         {
           "id": "bridge-pkg",
-          "name": "@proof/agent-bridge",
+          "name": "proof/agent-bridge",
           "color": "#8b5cf6",
           "items": [
             { "path": "packages/agent-bridge", "type": "directory" }
