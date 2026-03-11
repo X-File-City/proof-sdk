@@ -12,7 +12,7 @@
     {
       "id": "step-1-overview",
       "title": "Welcome to Proof SDK",
-      "description": "Proof SDK is an open-source collaborative markdown editor with provenance tracking and an AI agent bridge. The project is organized as a monorepo with npm workspaces: reusable SDK packages live in `packages/`, the editor and agent runtime in `src/`, the Express server in `server/`, and documentation in `docs/`. Let's explore each layer.",
+      "description": "Proof SDK is an open-source collaborative markdown editor with provenance tracking and an AI agent bridge. The project is organized as a monorepo with npm workspaces: reusable SDK packages live in packages, the editor and agent runtime in src, the Express server in server, and documentation in docs. Let's explore each layer.",
       "estimatedTime": 60,
       "colorMode": "fileTypes",
       "focusDirectory": "",
