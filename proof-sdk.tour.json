@@ -150,7 +150,7 @@
     {
       "id": "step-4-agent",
       "title": "Agent System (src/agent/)",
-      "description": "AI agents collaborate on documents via the orchestrator, session manager, and HTTP bridge client. Pluggable skills/, tools/, and prompts/ directories provide extensible agent capabilities. Agents can read state, comment, suggest, and rewrite through the bridge API.",
+      "description": "AI agents collaborate on documents via the orchestrator, session manager, and HTTP bridge client. Pluggable skills, tools, and prompts directories provide extensible agent capabilities. Agents can read state, comment, suggest, and rewrite through the bridge API.",
       "estimatedTime": 120,
       "focusDirectory": "src/agent",
       "colorMode": "fileTypes",
@@ -235,7 +235,7 @@
     {
       "id": "step-6-server",
       "title": "Express Server (server/)",
-      "description": "Express 5 backend with SQLite storage (db.ts), Yjs collaboration runtime (collab.ts), document mutation engine, agent API routes, bridge authentication, and .well-known/agent.json service discovery. WebSocket rooms handle real-time sync.",
+      "description": "Express 5 backend with SQLite storage (db.ts), Yjs collaboration runtime (collab.ts), document mutation engine, agent API routes, bridge authentication, and well-known/agent.json service discovery. WebSocket rooms handle real-time sync.",
       "estimatedTime": 120,
       "focusDirectory": "server",
       "colorMode": "fileTypes",
@@ -317,7 +317,7 @@
     {
       "id": "step-8-tests-and-docs",
       "title": "Tests & Documentation",
-      "description": "130+ integration tests in src/tests/ cover agent edits, bridge ops, sharing, and collab race conditions. docs/ has the provenance spec, ADRs, and agent API reference. apps/proof-example/ demonstrates agent HTTP bridge usage.",
+      "description": "Over 130 integration tests in src/tests cover agent edits, bridge ops, sharing, and collab race conditions. docs has the provenance spec, ADRs, and agent API reference. apps/proof-example demonstrates agent HTTP bridge usage.",
       "estimatedTime": 60,
       "focusDirectory": "",
       "colorMode": "fileTypes",
