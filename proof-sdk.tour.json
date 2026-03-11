@@ -14,22 +14,7 @@
       "title": "Welcome to Proof SDK",
       "description": "Proof SDK is an open-source collaborative markdown editor with provenance tracking and an AI agent bridge. The project is organized as a monorepo with npm workspaces: reusable SDK packages live in packages, the editor and agent runtime in src, the Express server in server, and documentation in docs. Let's explore each layer.",
       "estimatedTime": 60,
-      "colorMode": "fileTypes",
-      "focusDirectory": "",
-      "highlightLayers": [
-        {
-          "id": "top-level-config",
-          "name": "Root Configuration",
-          "color": "#94a3b8",
-          "items": [
-            { "path": "package.json", "type": "file" },
-            { "path": "tsconfig.json", "type": "file" },
-            { "path": "vite.config.ts", "type": "file" }
-          ],
-          "opacity": 0.6,
-          "renderStrategy": "border"
-        }
-      ]
+      "colorMode": "fileTypes"
     },
     {
       "id": "step-2-packages",
@@ -369,68 +354,6 @@
       "estimatedTime": 60,
       "focusDirectory": "",
       "colorMode": "fileTypes",
-      "highlightLayers": [
-        {
-          "id": "recap-packages",
-          "name": "SDK Packages",
-          "color": "#3b82f6",
-          "items": [
-            { "path": "packages", "type": "directory" }
-          ],
-          "opacity": 0.5,
-          "renderStrategy": "border"
-        },
-        {
-          "id": "recap-editor",
-          "name": "Editor",
-          "color": "#10b981",
-          "items": [
-            { "path": "src/editor", "type": "directory" }
-          ],
-          "opacity": 0.5,
-          "renderStrategy": "border"
-        },
-        {
-          "id": "recap-agent",
-          "name": "Agent System",
-          "color": "#8b5cf6",
-          "items": [
-            { "path": "src/agent", "type": "directory" }
-          ],
-          "opacity": 0.5,
-          "renderStrategy": "border"
-        },
-        {
-          "id": "recap-bridge",
-          "name": "Bridge Protocol",
-          "color": "#ec4899",
-          "items": [
-            { "path": "src/bridge", "type": "directory" }
-          ],
-          "opacity": 0.5,
-          "renderStrategy": "border"
-        },
-        {
-          "id": "recap-server",
-          "name": "Server",
-          "color": "#ef4444",
-          "items": [
-            { "path": "server", "type": "directory" }
-          ],
-          "opacity": 0.5,
-          "renderStrategy": "border"
-        },
-        {
-          "id": "recap-formats",
-          "name": "Data Formats",
-          "color": "#f59e0b",
-          "items": [
-            { "path": "src/formats", "type": "directory" }
-          ],
-          "opacity": 0.5,
-          "renderStrategy": "border"
-        }
-      ],
       "resources": [
         {
           "title": "Agent Contract (API Reference)",
