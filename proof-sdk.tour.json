@@ -34,7 +34,7 @@
     {
       "id": "step-2-packages",
       "title": "SDK Packages (packages/)",
-      "description": "The `packages/` directory contains five private npm workspace packages that form the reusable SDK core:\n\n• **@proof/core** (doc-core) — Core document types, marks system, and provenance sidecar format\n• **@proof/editor** (doc-editor) — Editor runtime with Milkdown plugins for suggestions, comments, and agent cursors\n• **@proof/server** (doc-server) — Express routers for documents, shares, agents, and the collaboration bridge\n• **@proof/sqlite** (doc-store-sqlite) — SQLite-backed document storage adapters\n• **@proof/agent-bridge** (agent-bridge) — Typed HTTP client and route schemas for AI agent integration\n\nEach package has a clean `src/index.ts` barrel export and can be independently consumed.",
+      "description": "Five SDK packages form the reusable core: @proof/core (types & marks), @proof/editor (Milkdown plugins), @proof/server (Express routers), @proof/sqlite (storage), and @proof/agent-bridge (typed HTTP client). Each has a barrel export and can be independently consumed.",
       "estimatedTime": 90,
       "focusDirectory": "packages",
       "colorMode": "fileTypes",
@@ -101,7 +101,7 @@
     {
       "id": "step-3-editor",
       "title": "Editor Runtime (src/editor/)",
-      "description": "The editor is built on Milkdown (a ProseMirror-based markdown editor) with 15+ custom plugins. Key areas:\n\n• **plugins/** — Comments, suggestions, marks sync, agent cursors, heatmap decorations, mermaid diagrams, and more\n• **schema/** — ProseMirror schema extensions for proof marks, code blocks, and frontmatter\n• **index.ts** — Main editor initialization and configuration\n• **actor.ts** — Actor pattern for document mutations\n• **batch-executor.ts** — Batch operation execution\n\nThe plugin system is the heart of the collaborative editing experience.",
+      "description": "Built on Milkdown (ProseMirror) with 15+ custom plugins for comments, suggestions, marks sync, agent cursors, and more. The schema/ directory extends ProseMirror with proof marks, code blocks, and frontmatter support.",
       "estimatedTime": 120,
       "focusDirectory": "src/editor",
       "colorMode": "fileTypes",
@@ -150,7 +150,7 @@
     {
       "id": "step-4-agent",
       "title": "Agent System (src/agent/)",
-      "description": "The agent system lets AI assistants collaborate on documents through an HTTP bridge. Key components:\n\n• **orchestrator.ts** — Agent orchestration and task coordination\n• **http-bridge-client.ts** — HTTP client for agent-to-server communication\n• **proposals.ts** — Proposal generation for agent-suggested edits\n• **session-manager.ts** — Agent session lifecycle management\n• **skills/** & **tools/** — Pluggable agent capabilities\n• **prompts/** — Prompt templates for agent interactions\n\nAgents can read document state, add comments, make suggestions, and apply full rewrites — all through the bridge API.",
+      "description": "AI agents collaborate on documents via the orchestrator, session manager, and HTTP bridge client. Pluggable skills/, tools/, and prompts/ directories provide extensible agent capabilities. Agents can read state, comment, suggest, and rewrite through the bridge API.",
       "estimatedTime": 120,
       "focusDirectory": "src/agent",
       "colorMode": "fileTypes",
@@ -202,7 +202,7 @@
     {
       "id": "step-5-bridge",
       "title": "Bridge Protocol (src/bridge/)",
-      "description": "The bridge layer defines how agents communicate with documents. It sits between the agent system and the server:\n\n• **bridge-routes.ts** — Route definitions and execution interfaces\n• **bridge-executor.ts** — Executes bridge operations (comments, suggestions, rewrites)\n• **collab-client.ts** — WebSocket client for real-time collaboration sync\n• **marks-preservation.ts** — Ensures marks survive across bridge operations\n• **share-client.ts** — Share token and permission management\n\nThis is the contract layer documented in `AGENT_CONTRACT.md`.",
+      "description": "The bridge sits between agents and the server. Routes and executor handle comments, suggestions, and rewrites. The collab client syncs via WebSocket, and marks-preservation ensures annotations survive operations. See AGENT_CONTRACT.md for the full API.",
       "estimatedTime": 90,
       "focusDirectory": "src/bridge",
       "colorMode": "fileTypes",
@@ -235,7 +235,7 @@
     {
       "id": "step-6-server",
       "title": "Express Server (server/)",
-      "description": "The server provides the HTTP API and real-time collaboration backend. Major areas:\n\n• **db.ts** — SQLite database layer (document CRUD, marks, events, idempotency)\n• **collab.ts** — Yjs collaboration runtime and WebSocket sync\n• **document-engine.ts** — Document mutation execution\n• **agent-routes.ts** & **agent-edit-v2.ts** — Agent API endpoints and edit operations\n• **bridge.ts** & **bridge-auth-policy.ts** — Bridge router and authentication\n• **discovery-routes.ts** — `.well-known/agent.json` service discovery\n\nThe server runs on Express 5 with better-sqlite3 for persistence and WebSocket rooms for real-time sync.",
+      "description": "Express 5 backend with SQLite storage (db.ts), Yjs collaboration runtime (collab.ts), document mutation engine, agent API routes, bridge authentication, and .well-known/agent.json service discovery. WebSocket rooms handle real-time sync.",
       "estimatedTime": 120,
       "focusDirectory": "server",
       "colorMode": "fileTypes",
@@ -287,7 +287,7 @@
     {
       "id": "step-7-formats-and-ui",
       "title": "Data Formats & UI (src/formats/, src/ui/)",
-      "description": "Supporting layers round out the runtime:\n\n**src/formats/** — Core data structures:\n• **marks.ts** — Marks serialization (comments, suggestions, rewrites)\n• **provenance-sidecar.ts** — Provenance metadata tracking authorship\n• **remark-proof-marks.ts** — Remark plugin for proof marks in markdown\n\n**src/ui/** — Custom web-component UI:\n• Agent presence indicators and cursors\n• Context menus, review menus, and theme picker\n• Welcome card and name prompt dialogs",
+      "description": "formats/ defines marks serialization, provenance sidecar metadata, and a remark plugin for proof marks. ui/ provides web components for agent presence, context menus, review workflows, and theming.",
       "estimatedTime": 60,
       "focusDirectory": "src",
       "colorMode": "fileTypes",
@@ -317,7 +317,7 @@
     {
       "id": "step-8-tests-and-docs",
       "title": "Tests & Documentation",
-      "description": "The project has strong test coverage and documentation:\n\n**src/tests/** — 130+ integration tests covering agent edits, bridge operations, share permissions, collab race conditions, and more. Tests run via `tsx` for direct TypeScript execution.\n\n**docs/** — Architecture decision records, the provenance spec (v2), agent API docs, and the Proof editor skill definition.\n\n**AGENT_CONTRACT.md** — The public API contract for agent bridge integration.\n\n**apps/proof-example/** — Example application showing agent HTTP bridge usage.",
+      "description": "130+ integration tests in src/tests/ cover agent edits, bridge ops, sharing, and collab race conditions. docs/ has the provenance spec, ADRs, and agent API reference. apps/proof-example/ demonstrates agent HTTP bridge usage.",
       "estimatedTime": 60,
       "focusDirectory": "",
       "colorMode": "fileTypes",
@@ -365,7 +365,7 @@
     {
       "id": "step-9-recap",
       "title": "Architecture Recap",
-      "description": "Here's the full picture:\n\n🔵 **packages/** — Reusable SDK packages (@proof/core, editor, server, sqlite, agent-bridge)\n🟢 **src/editor/** — Milkdown-based editor with 15+ plugins\n🟣 **src/agent/** — AI agent orchestration and session management\n🩷 **src/bridge/** — Bridge protocol connecting agents to documents\n🔴 **server/** — Express API, SQLite storage, and Yjs collaboration runtime\n🟡 **src/formats/** — Marks and provenance data structures\n\nTo get started: run `npm run dev` for the Vite dev server and `npm run serve` for the Express backend. Check `AGENT_CONTRACT.md` for the bridge API, and `docs/agent-docs.md` for agent integration details.",
+      "description": "The full architecture at a glance: SDK packages, editor plugins, agent system, bridge protocol, server backend, and data formats. Get started with `npm run dev` + `npm run serve`. See AGENT_CONTRACT.md and docs/agent-docs.md for integration details.",
       "estimatedTime": 60,
       "focusDirectory": "",
       "colorMode": "fileTypes",
